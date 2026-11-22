@@ -1,8 +1,8 @@
 import { json, type Request, type Response } from '../http';
-import { writePreferences } from '../db/preferencesRepo';
+import { savePreferences } from '../services/preferencesService';
 
 /** PUT /customers/:id/preferences */
 export function putPreferences(req: Request): Response {
-  const row = writePreferences({ customerId: req.params.id, ...req.body });
+  const row = savePreferences(req.params.id, req.body);
   return json(200, row);
 }
