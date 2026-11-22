@@ -1,0 +1,25 @@
+name: conformity
+on: pull_request
+jobs:
+  conformity:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # the base, to judge the change by its rules
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 26
+      - name: Install CodeTrellis
+        run: npm install -g codetrellis@0.3.1
+      - name: Start CodeTrellis
+        run: codetrellis start --quiet
+      - name: Write the findings to the summary
+        run: codetrellis check --base origin/main --format markdown >> "$GITHUB_STEP_SUMMARY" || true
+      - name: Conformity
+        run: codetrellis check --base origin/main # exit 3 when the change does not conform
+      - name: Stop CodeTrellis
+        if: always()
+        run: codetrellis stop

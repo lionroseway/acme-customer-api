@@ -1,0 +1,11 @@
+# Owned by the platform team.
+suite: architecture
+because: Endpoints stay thin. The services decide what may be written.
+rules:
+  - id: src-endpoints-not-src-db
+    from: src/endpoints/
+    mayNotImport: src/db/
+    strength: block
+    because: Endpoints go through services, which hold the validation.
+    since: 2026-10-05T09:00:00.000Z
+    by: Alex Kim
